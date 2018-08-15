@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import Person from './Person/Person';
+import ErrorBoundary from './ErrorBoundary/ErrorBoundary';
 
 class App extends Component {
   state = {
@@ -37,12 +38,13 @@ class App extends Component {
     //console.log("called deletePersonHandler");
     const people = [...this.state.people];
     people.splice(personIndex, 1);
-    this.setState({people: people});
+    this.setState({ people: people });
   }
 
   render() {
     const style = {
-      backgroundColor: 'white',
+      backgroundColor: 'green',
+      color: 'white',
       font: 'inherit',
       border: '1px solid blue',
       padding: '8px',
@@ -55,21 +57,33 @@ class App extends Component {
       people = (
         <div>
           {this.state.people.map((person, index) => {
-            return <Person 
-              click={() => this.deletePersonHandler(index)}
-              name={person.name}
-              age={person.age}
-              key={person.id}
-              changed={(event) => this.nameChangedHandler(event, person.id)}
-            />
+            return <ErrorBoundary  key={person.id}>
+              <Person
+                click={() => this.deletePersonHandler(index)}
+                name={person.name}
+                age={person.age}
+                changed={(event) => this.nameChangedHandler(event, person.id)}
+              />
+            </ErrorBoundary>
           })}
         </div>
       );
+
+      style.backgroundColor = 'red';
+    }
+
+    let classes = [];
+    if (this.state.people.length <= 2) {
+      classes.push('purple');
+    }
+    if (this.state.people.length <= 1) {
+      classes.push('bold');
     }
 
     return (
       <div className="App">
         <h1>yo react</h1>
+        <p className={classes.join(' ')}>react stuff</p>
         <button
           onClick={this.togglePeopleHandler}
           style={style}>switch me</button>

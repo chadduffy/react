@@ -1,3 +1,11 @@
 .App {
   text-align: center;
 }
+
+.purple {
+  color: purple;
+}
+
+.bold {
+  font-weight: bold;
+}
